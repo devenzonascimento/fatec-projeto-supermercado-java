@@ -80,6 +80,44 @@ public class Endereco {
         this.cep = cep;
     }
 
+    public String converter() throws Exception {
+        validarEndereco();
+
+        if (Objects.equals(complemento, "")) {
+            return converterEnderecoSemComplemento();
+        }
+
+        return converterEnderecoCompleto();
+    }
+
+    private boolean validarEndereco() throws Exception {
+        if (Objects.equals(logradouro, "")) {
+            throw new Exception("Logradouro é obrigatório.");
+        }
+
+        if (Objects.equals(numero, "")) {
+            throw new Exception("Numero é obrigatório.");
+        }
+
+        if (Objects.equals(bairro, "")) {
+            throw new Exception("Bairro é obrigatório.");
+        }
+
+        if (Objects.equals(cidade, "")) {
+            throw new Exception("Cidade é obrigatório.");
+        }
+
+        if (Objects.equals(uf, "")) {
+            throw new Exception("UF é obrigatório.");
+        }
+
+        if (Objects.equals(cep, "")) {
+            throw new Exception("CEP é obrigatório.");
+        }
+
+        return true;
+    }
+
     private String converterEnderecoCompleto() {
         StringBuilder construtorDeEndereco = new StringBuilder();
 
@@ -116,50 +154,5 @@ public class Endereco {
         construtorDeEndereco.append(cep);
 
         return construtorDeEndereco.toString();
-    }
-
-    private boolean validarEndereco() {
-        try {
-            if (Objects.equals(logradouro, "")) {
-                throw new Exception("Logradouro é obrigatório.");
-            }
-
-            if (Objects.equals(numero, "")) {
-                throw new Exception("Numero é obrigatório.");
-            }
-
-            if (Objects.equals(bairro, "")) {
-                throw new Exception("Bairro é obrigatório.");
-            }
-
-            if (Objects.equals(cidade, "")) {
-                throw new Exception("Cidade é obrigatório.");
-            }
-
-            if (Objects.equals(uf, "")) {
-                throw new Exception("UF é obrigatório.");
-            }
-
-            if (Objects.equals(cep, "")) {
-                throw new Exception("CEP é obrigatório.");
-            }
-
-            return true;
-
-        } catch (Exception e) {
-            System.out.println("Erro: " + e.getMessage());
-
-            return false;
-        }
-    }
-
-    public String converter() {
-        boolean enderecoValido = validarEndereco();
-
-        if (Objects.equals(complemento, "")) {
-            return converterEnderecoSemComplemento();
-        }
-
-        return converterEnderecoCompleto();
     }
 }

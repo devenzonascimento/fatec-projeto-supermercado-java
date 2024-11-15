@@ -23,6 +23,7 @@ public class TelaFornecedor {
     private JTextField cidadeTxt;
     private JTextField ufTxt;
     private JTextField cepTxt;
+    private JLabel erroMsg;
 
 
     public TelaFornecedor() {
@@ -39,6 +40,7 @@ public class TelaFornecedor {
         cidadeTxt = new JTextField(30);
         ufTxt = new JTextField(30);
         cepTxt = new JTextField(30);
+        erroMsg = new JLabel();
     }
 
     public void mostrar() {
@@ -55,18 +57,38 @@ public class TelaFornecedor {
         frameLayout.insets = new Insets(10, 10, 10, 10);
 
         frameLayout.gridy = 0;
+        JPanel painelTitulo = criarPainelTitulo();
+        frame.add(painelTitulo, frameLayout);
+
+        frameLayout.gridy = 1;
         JPanel painelCadastroDadosBasicos = criarPainelCadastroDadosBasicos();
         frame.add(painelCadastroDadosBasicos, frameLayout);
 
-        frameLayout.gridy = 1;
+        frameLayout.gridy = 2;
         JPanel painelCadastroDadosEndereco = criarPainelCadastroDadosEndereco();
         frame.add(painelCadastroDadosEndereco, frameLayout);
 
-        frameLayout.gridy = 2;
+        frameLayout.gridy = 3;
+        JPanel painelMensagemDeErro = criarPainelMensagemDeErro();
+        frame.add(painelMensagemDeErro, frameLayout);
+
+        frameLayout.gridy = 4;
         JPanel painelCadastroBotoes = criarPainelCadastroBotoes();
         frame.add(painelCadastroBotoes, frameLayout);
 
         frame.setVisible(true);
+    }
+
+    private JPanel criarPainelTitulo() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JLabel tituloMsg = new JLabel("Cadastro de Forncedor");
+
+        tituloMsg.setFont(new Font("ARIAL", 0, 28));
+
+        panel.add(tituloMsg);
+
+        return panel;
     }
 
     private JPanel criarPainelCadastroDadosBasicos() {
@@ -183,6 +205,20 @@ public class TelaFornecedor {
         return panel;
     }
 
+    private JPanel criarPainelMensagemDeErro() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        erroMsg.setBackground(Color.WHITE);
+
+        erroMsg.setForeground(Color.RED);
+
+        erroMsg.setVisible(false);
+
+        panel.add(erroMsg);
+
+        return panel;
+    }
+
     private void aoClicarEmSalvar(ActionEvent event) {
         String nome = nomeTxt.getText();
         String cnpj = cnpjTxt.getText();
@@ -196,14 +232,22 @@ public class TelaFornecedor {
         String uf = ufTxt.getText();
         String cep = cepTxt.getText();
 
-        Endereco manipularEndereco = new Endereco(logradouro, numero, complemento, bairro, cidade, uf, cep);
+        try {
+            Endereco manipularEndereco = new Endereco(logradouro, numero, complemento, bairro, cidade, uf, cep);
 
-        String endereco = manipularEndereco.converter();
+            String endereco = manipularEndereco.converter();
 
-        Fornecedor fornecedor = new Fornecedor(nome, cnpj, telefone, email, endereco);
+            Fornecedor fornecedor = new Fornecedor(nome, cnpj, telefone, email, endereco);
 
-        FornecedorDAO fornecedorDAO = new FornecedorDAO();
+            FornecedorDAO fornecedorDAO = new FornecedorDAO();
 
-        fornecedorDAO.inserir(fornecedor);
+            fornecedorDAO.inserir(fornecedor);
+        } catch(Exception e) {
+            String mensagemDeErro = e.getMessage();
+
+            erroMsg.setText(mensagemDeErro);
+
+            erroMsg.setVisible(true);
+        }
     }
 }
