@@ -23,7 +23,7 @@ public class ConexaoMysql {
         return this.conexao;
     }
 
-    public boolean descontecar(){
+    public boolean desconectar(){
         try{
             if(this.conexao.isClosed()==false){
                 this.conexao.close();

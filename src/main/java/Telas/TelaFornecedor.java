@@ -45,44 +45,66 @@ public class TelaFornecedor {
 
     public void mostrar() {
         JFrame frame = new JFrame("Cadastro de Fornecedor");
-        frame.setLayout(new GridBagLayout());
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
+        frame.setSize(1000, 700);
 
-        // Adicionando os painéis ao frame principal
-        GridBagConstraints frameLayout = new GridBagConstraints();
-        frameLayout.fill = GridBagConstraints.BOTH;
-        frameLayout.gridx = 0;
-        frameLayout.weightx = 1.0; // Expansão horizontal para cada painel
-        frameLayout.insets = new Insets(10, 10, 10, 10);
 
-        frameLayout.gridy = 0;
-        JPanel painelTitulo = criarPainelTitulo();
-        frame.add(painelTitulo, frameLayout);
+        JPanel painelCadastro = criarPainelCadastro();
 
-        frameLayout.gridy = 1;
-        JPanel painelCadastroDadosBasicos = criarPainelCadastroDadosBasicos();
-        frame.add(painelCadastroDadosBasicos, frameLayout);
+        ListagemFornecedores listagemFornecedores = new ListagemFornecedores();
 
-        frameLayout.gridy = 2;
-        JPanel painelCadastroDadosEndereco = criarPainelCadastroDadosEndereco();
-        frame.add(painelCadastroDadosEndereco, frameLayout);
+        JPanel listagem = listagemFornecedores.criarListagem();
 
-        frameLayout.gridy = 3;
-        JPanel painelMensagemDeErro = criarPainelMensagemDeErro();
-        frame.add(painelMensagemDeErro, frameLayout);
+        JTabbedPane abas = new JTabbedPane();
 
-        frameLayout.gridy = 4;
-        JPanel painelCadastroBotoes = criarPainelCadastroBotoes();
-        frame.add(painelCadastroBotoes, frameLayout);
+        abas.add("Fornecedores", listagem);
+
+        abas.add("Cadastrar Fornecedor", painelCadastro);
+
+        frame.add(abas);
 
         frame.setVisible(true);
+
+
+    }
+
+    private JPanel criarPainelCadastro() {
+        JPanel panel = new JPanel(new GridBagLayout());
+
+        GridBagConstraints layout = new GridBagConstraints();
+        layout.fill = GridBagConstraints.BOTH;
+        layout.gridx = 1;
+        layout.weightx = 1.0;
+        layout.insets = new Insets(0, 200, 0, 200);
+
+        layout.gridy = 0;
+        JPanel painelTitulo = criarPainelTitulo();
+        panel.add(painelTitulo, layout);
+
+        layout.gridy = 1;
+        JPanel painelCadastroDadosBasicos = criarPainelCadastroDadosBasicos();
+        panel.add(painelCadastroDadosBasicos, layout);
+
+        layout.gridy = 2;
+        JPanel painelCadastroDadosEndereco = criarPainelCadastroDadosEndereco();
+        panel.add(painelCadastroDadosEndereco, layout);
+
+        layout.gridy = 3;
+        JPanel painelMensagemDeErro = criarPainelMensagemDeErro();
+        panel.add(painelMensagemDeErro, layout);
+
+        layout.gridy = 4;
+        JPanel painelCadastroBotoes = criarPainelCadastroBotoes();
+        panel.add(painelCadastroBotoes, layout);
+
+        return panel;
     }
 
     private JPanel criarPainelTitulo() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        JLabel tituloMsg = new JLabel("Cadastro de Forncedor");
+        JLabel tituloMsg = new JLabel("Cadastro de Fornecedor");
 
         tituloMsg.setFont(new Font("ARIAL", 0, 28));
 
@@ -242,7 +264,7 @@ public class TelaFornecedor {
             FornecedorDAO fornecedorDAO = new FornecedorDAO();
 
             fornecedorDAO.inserir(fornecedor);
-        } catch(Exception e) {
+        } catch (Exception e) {
             String mensagemDeErro = e.getMessage();
 
             erroMsg.setText(mensagemDeErro);
