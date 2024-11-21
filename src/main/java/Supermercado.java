@@ -1,3 +1,4 @@
+import Telas.Pedidos.TelaPedidos;
 import Telas.TelaFornecedor;
 
 public class Supermercado {
@@ -5,5 +6,9 @@ public class Supermercado {
         TelaFornecedor telaFornecedor = new TelaFornecedor();
 
         telaFornecedor.mostrar();
+
+        TelaPedidos telaPedidos = new TelaPedidos();
+
+        telaPedidos.mostrar();
     }
 }
