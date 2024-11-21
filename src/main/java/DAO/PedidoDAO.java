@@ -1,6 +1,6 @@
 package DAO;
 
-import Entidade.ItemPedido;
+import Entidade.ItemProduto;
 import Entidade.Pedido;
 
 import java.sql.*;
@@ -20,7 +20,7 @@ public class PedidoDAO {
 
         System.out.println(pedido.getFornecedor());
         System.out.println(pedido.getDataEntrega());
-        for (ItemPedido item : pedido.getItens()) {
+        for (ItemProduto item : pedido.getItens()) {
             System.out.println(item.getProduto());
         }
 
@@ -77,11 +77,11 @@ public class PedidoDAO {
             String sqlItemPedido = "INSERT INTO item_pedido (quantidade, preco_unitario, pedido_id, produto_id) VALUES (?, ?, ?, ?)";
             stmtItemPedido = conn.prepareStatement(sqlItemPedido);
 
-            for (ItemPedido itemPedido : pedido.getItens()) {
-                stmtItemPedido.setInt(1, itemPedido.getQuantidade());
-                stmtItemPedido.setDouble(2, itemPedido.getPrecoUnitario());
+            for (ItemProduto itemProduto : pedido.getItens()) {
+                stmtItemPedido.setInt(1, itemProduto.getQuantidade());
+                stmtItemPedido.setDouble(2, itemProduto.getPrecoUnitario());
                 stmtItemPedido.setLong(3, pedidoId);
-                stmtItemPedido.setLong(4, itemPedido.getProduto().getId());
+                stmtItemPedido.setLong(4, itemProduto.getProduto().getId());
 
                 stmtItemPedido.addBatch();
             }

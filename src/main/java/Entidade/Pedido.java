@@ -12,11 +12,11 @@ public class Pedido {
     private Enum<StatusPedido> status;
     private Fornecedor fornecedor;
     private Pagamento pagamento;
-    private ArrayList<ItemPedido> itens;
+    private ArrayList<ItemProduto> itens;
 
     public Pedido() {}
 
-    public Pedido(long id, Date dataPedido, Date dataEntrega, Enum<StatusPedido> status, Fornecedor fornecedor, Pagamento pagamento, ArrayList<ItemPedido> itens) {
+    public Pedido(long id, Date dataPedido, Date dataEntrega, Enum<StatusPedido> status, Fornecedor fornecedor, Pagamento pagamento, ArrayList<ItemProduto> itens) {
         setId(id);
         setDataPedido(dataPedido);
         setDataEntrega(dataEntrega);
@@ -74,11 +74,11 @@ public class Pedido {
         this.pagamento = pagamento;
     }
 
-    public ArrayList<ItemPedido> getItens() {
+    public ArrayList<ItemProduto> getItens() {
         return itens;
     }
 
-    public void setItens(ArrayList<ItemPedido> itens) {
+    public void setItens(ArrayList<ItemProduto> itens) {
         this.itens = itens;
     }
 }

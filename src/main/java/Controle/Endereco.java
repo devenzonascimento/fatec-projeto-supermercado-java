@@ -1,4 +1,4 @@
-package Entidade;
+package Controle;
 
 import java.util.Objects;
 

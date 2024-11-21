@@ -242,12 +242,12 @@ public class TelaPedidos {
         }
     }
 
-    private ArrayList<ItemPedido> obterItensDePedido() {
-        ArrayList<ItemPedido> itens = new ArrayList<>();
+    private ArrayList<ItemProduto> obterItensDePedido() {
+        ArrayList<ItemProduto> itens = new ArrayList<>();
 
         // Itera por todas as linhas da tabela
         for (int i = 0; i < itensTableModel.getRowCount(); i++) {
-            ItemPedido item = new ItemPedido();
+            ItemProduto item = new ItemProduto();
 
             Produto produto = (Produto) itensTableModel.getValueAt(i, 0);
             int quantidade = (int) itensTableModel.getValueAt(i, 1);
@@ -268,9 +268,9 @@ public class TelaPedidos {
     private double obterValorTotal() {
         double valorTotal = 0.0;
 
-        ArrayList<ItemPedido> itens = obterItensDePedido();
+        ArrayList<ItemProduto> itens = obterItensDePedido();
 
-        for (ItemPedido item : itens) {
+        for (ItemProduto item : itens) {
             valorTotal += item.getSubTotal();
         }
 
@@ -296,7 +296,7 @@ public class TelaPedidos {
 
         try {
             Fornecedor fornecedor = (Fornecedor) fornecedorComboBox.getSelectedItem();
-            ArrayList<ItemPedido> itensDoPedido = obterItensDePedido();
+            ArrayList<ItemProduto> itensDoPedido = obterItensDePedido();
             Date dataEntrega = new SimpleDateFormat("dd-MM-yyyy").parse(dataEntregaString);
 
             Pagamento pagamento = new Pagamento();

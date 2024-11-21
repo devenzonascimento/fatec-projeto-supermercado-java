@@ -1,7 +1,7 @@
 package Tela;
 
 import DAO.FornecedorDAO;
-import Entidade.Endereco;
+import Controle.Endereco;
 import Entidade.Fornecedor;
 
 import javax.swing.*;

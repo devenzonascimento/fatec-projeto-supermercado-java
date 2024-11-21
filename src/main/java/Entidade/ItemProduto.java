@@ -1,15 +1,15 @@
 package Entidade;
 
-public class ItemPedido {
+public class ItemProduto {
     private long id;
     private int quantidade;
     private double precoUnitario;
     private double subTotal;
     private Produto produto;
 
-    public ItemPedido() {}
+    public ItemProduto() {}
 
-    public ItemPedido(long id, int quantidade, double precoUnitario, double subTotal, Produto produto) {
+    public ItemProduto(long id, int quantidade, double precoUnitario, double subTotal, Produto produto) {
         setId(id);
         setQuantidade(quantidade);
         setPrecoUnitario(precoUnitario);
