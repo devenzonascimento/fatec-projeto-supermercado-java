@@ -6,7 +6,11 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class FornecedorDAO {
-    private ConexaoMysql conexaoMySql = new ConexaoMysql();
+    private ConexaoMysql conexaoMySql;
+
+    public FornecedorDAO() {
+        conexaoMySql = new ConexaoMysql();
+    }
 
     public int inserir(Fornecedor fornecedor) {
         Connection conn = conexaoMySql.conectar();
