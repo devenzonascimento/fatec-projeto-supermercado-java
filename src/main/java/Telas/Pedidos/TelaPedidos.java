@@ -6,6 +6,7 @@ import DAO.PedidoDAO;
 import DAO.ProdutoDAO;
 import Enums.MetodoPagamento;
 import Enums.TipoPagamento;
+import Telas.Utilitarios.MostrarPopUp;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -31,10 +32,10 @@ public class TelaPedidos {
     private JButton adicionarItemBtn;
     private JButton salvarPedidoBtn;
 
-    private JLabel erroMsg;
-
     private DefaultTableModel itensTableModel;
     private JTable itensTable;
+
+    private MostrarPopUp popUp;
 
     public TelaPedidos() {
         fornecedorComboBox = new JComboBox<Fornecedor>();
@@ -51,9 +52,8 @@ public class TelaPedidos {
         precoUnitarioTxt = new JTextField(10);
         adicionarItemBtn = new JButton("Adicionar Item");
         salvarPedidoBtn = new JButton("Salvar Pedido");
-        erroMsg = new JLabel();
-        erroMsg.setForeground(Color.RED);
-        erroMsg.setVisible(false);
+
+        popUp = new MostrarPopUp();
 
         // Tabela para exibir itens do pedido
         itensTableModel = new DefaultTableModel(new String[]{"Produto", "Quantidade", "Preço Unitário", "Subtotal"}, 0);
@@ -188,8 +188,6 @@ public class TelaPedidos {
         salvarPedidoBtn.setText("Salvar Pedido");
         panel.add(salvarPedidoBtn);
 
-        panel.add(erroMsg);
-
         return panel;
     }
 
@@ -206,8 +204,7 @@ public class TelaPedidos {
                 fornecedorComboBox.addItem(fornecedor);
             }
         } catch (Exception e) {
-            erroMsg.setText("Erro ao carregar produtos: " + e.getMessage());
-            erroMsg.setVisible(true);
+            popUp.mensagemDeErro("Erro ao carregar fornecedores: " + e.getMessage());
         }
     }
 
@@ -219,8 +216,7 @@ public class TelaPedidos {
                 produtoComboBox.addItem(produto);
             }
         } catch (Exception e) {
-            erroMsg.setText("Erro ao carregar produtos: " + e.getMessage());
-            erroMsg.setVisible(true);
+            popUp.mensagemDeErro("Erro ao carregar produtos: " + e.getMessage());
         }
     }
 
@@ -242,8 +238,7 @@ public class TelaPedidos {
 
             atualizarValorTotal();
         } catch (NumberFormatException ex) {
-            erroMsg.setText("Quantidade e Preço devem ser números válidos.");
-            erroMsg.setVisible(true);
+            popUp.mensagemDeErro("Quantidade e Preço devem ser números válidos.");
         }
     }
 
@@ -288,16 +283,14 @@ public class TelaPedidos {
 
     private void salvarPedido(ActionEvent e) {
         if (itensTableModel.getRowCount() == 0) {
-            erroMsg.setText("Adicione ao menos um item ao pedido.");
-            erroMsg.setVisible(true);
+            popUp.mensagemDeErro("Adicione ao menos um item ao pedido.");
             return;
         }
 
         String dataEntregaString = dataEntregaTxt.getText();
 
         if (dataEntregaString.isEmpty()) {
-            erroMsg.setText("Preencha a data de entrega.");
-            erroMsg.setVisible(true);
+            popUp.mensagemDeErro("Preencha a data de entrega.");
             return;
         }
 
@@ -321,18 +314,14 @@ public class TelaPedidos {
             int pedidoId = pedidoDAO.criar(pedido);
 
             if (pedidoId == 0) {
-                erroMsg.setText("Erro ao salvar o pedido.");
-                erroMsg.setVisible(true);
+                popUp.mensagemDeErro("Erro ao salvar o pedido.");
                 return;
             }
 
-            erroMsg.setText("Pedido salvo com sucesso!");
-            erroMsg.setForeground(Color.GREEN);
-            erroMsg.setVisible(true);
+            popUp.mensagemDeSucesso("Pedido salvo com sucesso!");
 
         } catch (Exception ex) {
-            erroMsg.setText("Erro ao salvar pedido: " + ex.getMessage());
-            erroMsg.setVisible(true);
+            popUp.mensagemDeErro("Erro ao salvar pedido: " + ex.getMessage());
         }
     }
 }
