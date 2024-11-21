@@ -7,6 +7,16 @@ public class ItemPedido {
     private double subTotal;
     private Produto produto;
 
+    public ItemPedido() {}
+
+    public ItemPedido(long id, int quantidade, double precoUnitario, double subTotal, Produto produto) {
+        setId(id);
+        setQuantidade(quantidade);
+        setPrecoUnitario(precoUnitario);
+        setSubTotal(subTotal);
+        setProduto(produto);
+    }
+
     public long getId() {
         return id;
     }
