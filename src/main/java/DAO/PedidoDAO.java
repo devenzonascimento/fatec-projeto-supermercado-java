@@ -1,7 +1,7 @@
 package DAO;
 
-import Classes.ItemPedido;
-import Classes.Pedido;
+import Entidade.ItemPedido;
+import Entidade.Pedido;
 
 import java.sql.*;
 

@@ -1,6 +1,6 @@
 package DAO;
 
-import Classes.Produto;
+import Entidade.Produto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

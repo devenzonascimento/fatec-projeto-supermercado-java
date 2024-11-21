@@ -1,7 +1,7 @@
-package Classes;
+package Entidade;
 
-import Enums.MetodoPagamento;
-import Enums.TipoPagamento;
+import Enum.MetodoPagamento;
+import Enum.TipoPagamento;
 
 import java.util.Date;
 

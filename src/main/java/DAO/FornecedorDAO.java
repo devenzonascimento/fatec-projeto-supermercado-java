@@ -1,6 +1,6 @@
 package DAO;
 
-import Classes.Fornecedor;
+import Entidade.Fornecedor;
 
 import java.sql.*;
 import java.util.ArrayList;

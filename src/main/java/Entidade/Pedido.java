@@ -1,6 +1,6 @@
-package Classes;
+package Entidade;
 
-import Enums.StatusPedido;
+import Enum.StatusPedido;
 
 import java.util.ArrayList;
 import java.util.Date;

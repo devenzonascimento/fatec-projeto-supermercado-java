@@ -1,6 +1,6 @@
-package Telas;
+package Tela;
 
-import Classes.Fornecedor;
+import Entidade.Fornecedor;
 import DAO.FornecedorDAO;
 
 import javax.swing.*;

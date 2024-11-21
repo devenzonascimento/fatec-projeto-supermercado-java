@@ -1,12 +1,12 @@
-package Telas.Pedidos;
+package Tela.Pedidos;
 
-import Classes.*;
+import Entidade.*;
 import DAO.FornecedorDAO;
 import DAO.PedidoDAO;
 import DAO.ProdutoDAO;
-import Enums.MetodoPagamento;
-import Enums.TipoPagamento;
-import Telas.Utilitarios.MostrarPopUp;
+import Enum.MetodoPagamento;
+import Enum.TipoPagamento;
+import Tela.Utilitarios.MostrarPopUp;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

@@ -1,4 +1,4 @@
-package Classes;
+package Entidade;
 
 public class Produto {
     private long id;

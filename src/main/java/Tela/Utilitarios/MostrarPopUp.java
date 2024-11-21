@@ -1,4 +1,4 @@
-package Telas.Utilitarios;
+package Tela.Utilitarios;
 
 import javax.swing.*;
 
