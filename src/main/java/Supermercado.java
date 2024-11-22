@@ -14,12 +14,12 @@ public class Supermercado {
         CadastroDeFornecedor telaCadastroDeFornecedor = new CadastroDeFornecedor();
         ListagemDeFornecedores telaListagemDeFornecedores = new ListagemDeFornecedores();
         SolicitacaoDePedido telaSolicitacaoDePedido = new SolicitacaoDePedido();
-        HistoricoDePedidos telaHistoricoDePedidos = new HistoricoDePedidos();
+        HistoricoDeCompras telaHistoricoDeCompras = new HistoricoDeCompras();
 
         JPanel cadastroDeFornecedor = telaCadastroDeFornecedor.criar();
         JPanel listagemDeFornecedores = telaListagemDeFornecedores.criar();
         JPanel solicitacaoDePedido = telaSolicitacaoDePedido.criar();
-        JPanel historicoDePedidos = telaHistoricoDePedidos.criar();
+        JPanel historicoDePedidos = telaHistoricoDeCompras.criar();
 
         secoes.add("Cadastrar Fornecedor", cadastroDeFornecedor);
         secoes.add("Lista de Fornecedores", listagemDeFornecedores);
@@ -31,3 +31,115 @@ public class Supermercado {
         frame.setVisible(true);
     }
 }
+// TODO: Implementar melhorias de codigo
+
+/*
+Cliente
+
+    Atributos:
+    id (long)
+    nome (String)
+    cpf (String)
+    email (String)
+    telefone (String)
+    endereco (Endereco)
+
+    Métodos:
+    toString(): Exibir as informações do cliente.
+    isValidCpf(): Validar o CPF do cliente.
+
+
+Contato
+
+    Atributos:
+    id (long)
+    telefone (String)
+    email (String)
+    endereco (Endereco)
+
+
+Fornecedor
+
+    Atributos:
+    id (long)
+    nome (String)
+    cnpj (String)
+    telefone (String)
+    email (String)
+    endereco (Endereco)
+    produtos (List<Produto>)
+
+    Métodos:
+    getProdutosFornecidos(): Retornar a lista de produtos fornecidos.
+    toString(): Exibir as informações básicas do fornecedor.
+
+
+ItemProduto
+
+    Atributos:
+    id (long)
+    quantidade (int)
+    preco (double)
+    produto (Produto)
+
+    Métodos:
+    getSubtotal(): Retornar o subtotal do item (quantidade × preço).
+
+
+Pagamento
+
+    Atributos:
+    id (long)
+    metodo (MetodoPagamento - Enum)
+    valor (double)
+    dataPagamento (Date)
+
+    Métodos:
+    toString(): Exibir os detalhes do pagamento.
+
+
+Pedido
+
+    Atributos:
+    id (long)
+    dataPedido (Date)
+    dataEntrega (Date)
+    status (StatusPedido - Enum)
+    fornecedor (Fornecedor)
+    itens (List<ItemProduto>)
+    pagamento (Pagamento)
+
+    Métodos:
+    getValorTotal(): Calcular o valor total do pedido.
+    getStatus(): Retornar o status atual do pedido.
+
+
+Produto
+
+    Atributos:
+    id (long)
+    nome (String)
+    codigoDeBarras (String)
+    precoVenda (double)
+    quantidadeAtual (int)
+    quantidadeMinima (int)
+    categoria (String)
+
+    Métodos:
+    isEstoqueBaixo(): Verificar se o estoque está abaixo da quantidade mínima.
+    toString(): Exibir detalhes do produto.
+
+
+Venda
+
+    Atributos:
+    id (long)
+    dataVenda (Date)
+    cliente (Cliente)
+    itens (List<ItemProduto>)
+    pagamento (Pagamento)
+
+    Métodos:
+    getValorTotal(): Calcular o valor total da venda.
+    toString()
+*/

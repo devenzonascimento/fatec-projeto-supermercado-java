@@ -97,7 +97,7 @@ public class SolicitacaoDePedido {
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Dados do pedido", TitledBorder.LEFT, TitledBorder.TOP));
         GridBagConstraints layout = new GridBagConstraints();
 
-        layout.insets = new Insets(5, 5, 5, 5);
+        layout.insets = new Insets(2, 5, 2, 5);
         layout.fill = GridBagConstraints.BOTH;
         layout.gridx = 0;
         layout.weightx = 1.0;
@@ -111,7 +111,7 @@ public class SolicitacaoDePedido {
         layout.gridy = 2;
         panel.add(new JLabel("Metodo de pagamento:"), layout);
         layout.gridy = 3;
-        panel.add(new JLabel("Data de entrega:"), layout);
+        panel.add(new JLabel("Data de entrega (DD-MM-YYYY):"), layout);
 
         layout.gridx = 1;
         layout.gridy = 0;

@@ -59,7 +59,7 @@ public class CadastroDeFornecedor {
         layout.fill = GridBagConstraints.BOTH;
         layout.gridx = 1;
         layout.weightx = 1.0;
-        layout.insets = new Insets(0, 200, 0, 200);
+        layout.insets = new Insets(0, 150, 15, 150);
 
         layout.gridy = 0;
         JPanel painelTitulo = criarPainelTitulo();
