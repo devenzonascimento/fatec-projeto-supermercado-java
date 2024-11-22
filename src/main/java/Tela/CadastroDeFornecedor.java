@@ -1,21 +1,22 @@
 package Tela;
 
-import DAO.FornecedorDAO;
 import Controle.Endereco;
+import DAO.FornecedorDAO;
 import Entidade.Fornecedor;
+import Tela.Utilitarios.MostrarPopUp;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class TelaFornecedor {
+public class CadastroDeFornecedor {
 
-    private JButton salvarBtn;
     private JTextField nomeTxt;
     private JTextField cnpjTxt;
     private JTextField telefoneTxt;
     private JTextField emailTxt;
+
     private JTextField logradouroTxt;
     private JTextField numeroTxt;
     private JTextField complementoTxt;
@@ -23,16 +24,18 @@ public class TelaFornecedor {
     private JTextField cidadeTxt;
     private JTextField ufTxt;
     private JTextField cepTxt;
-    private JLabel erroMsg;
 
+    private JButton limparBtn;
+    private JButton salvarBtn;
 
-    public TelaFornecedor() {
-        salvarBtn = new JButton();
+    private MostrarPopUp popUp;
 
+    public CadastroDeFornecedor() {
         nomeTxt = new JTextField(30);
         cnpjTxt = new JTextField(30);
         telefoneTxt = new JTextField(30);
         emailTxt = new JTextField(30);
+
         logradouroTxt = new JTextField(30);
         numeroTxt = new JTextField(30);
         complementoTxt = new JTextField(30);
@@ -40,36 +43,16 @@ public class TelaFornecedor {
         cidadeTxt = new JTextField(30);
         ufTxt = new JTextField(30);
         cepTxt = new JTextField(30);
-        erroMsg = new JLabel();
+
+        salvarBtn = new JButton();
+        limparBtn = new JButton();
+
+        popUp = new MostrarPopUp();
+
+        configurarEventos();
     }
 
-    public void mostrar() {
-        JFrame frame = new JFrame("Cadastro de Fornecedor");
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 700);
-
-
-        JPanel painelCadastro = criarPainelCadastro();
-
-        ListagemFornecedores listagemFornecedores = new ListagemFornecedores();
-
-        JPanel listagem = listagemFornecedores.criarListagem();
-
-        JTabbedPane abas = new JTabbedPane();
-
-        abas.add("Fornecedores", listagem);
-
-        abas.add("Cadastrar Fornecedor", painelCadastro);
-
-        frame.add(abas);
-
-        frame.setVisible(true);
-
-
-    }
-
-    private JPanel criarPainelCadastro() {
+    public JPanel criar() {
         JPanel panel = new JPanel(new GridBagLayout());
 
         GridBagConstraints layout = new GridBagConstraints();
@@ -83,18 +66,14 @@ public class TelaFornecedor {
         panel.add(painelTitulo, layout);
 
         layout.gridy = 1;
-        JPanel painelCadastroDadosBasicos = criarPainelCadastroDadosBasicos();
+        JPanel painelCadastroDadosBasicos = criarFormDadosDeContato();
         panel.add(painelCadastroDadosBasicos, layout);
 
         layout.gridy = 2;
-        JPanel painelCadastroDadosEndereco = criarPainelCadastroDadosEndereco();
+        JPanel painelCadastroDadosEndereco = criarFormDadosDeEndereco();
         panel.add(painelCadastroDadosEndereco, layout);
 
         layout.gridy = 3;
-        JPanel painelMensagemDeErro = criarPainelMensagemDeErro();
-        panel.add(painelMensagemDeErro, layout);
-
-        layout.gridy = 4;
         JPanel painelCadastroBotoes = criarPainelCadastroBotoes();
         panel.add(painelCadastroBotoes, layout);
 
@@ -113,7 +92,7 @@ public class TelaFornecedor {
         return panel;
     }
 
-    private JPanel criarPainelCadastroDadosBasicos() {
+    private JPanel criarFormDadosDeContato() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Dados Cadastrais", TitledBorder.LEFT, TitledBorder.TOP));
 
@@ -155,7 +134,7 @@ public class TelaFornecedor {
         return panel;
     }
 
-    private JPanel criarPainelCadastroDadosEndereco() {
+    private JPanel criarFormDadosDeEndereco() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Dados de Endereço", TitledBorder.LEFT, TitledBorder.TOP));
 
@@ -218,30 +197,35 @@ public class TelaFornecedor {
     private JPanel criarPainelCadastroBotoes() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
+        limparBtn.setText("Limpar");
+        panel.add(limparBtn);
+
         salvarBtn.setText("Salvar");
-
-        salvarBtn.addActionListener(this::aoClicarEmSalvar);
-
         panel.add(salvarBtn);
 
         return panel;
     }
 
-    private JPanel criarPainelMensagemDeErro() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        erroMsg.setBackground(Color.WHITE);
-
-        erroMsg.setForeground(Color.RED);
-
-        erroMsg.setVisible(false);
-
-        panel.add(erroMsg);
-
-        return panel;
+    private void configurarEventos() {
+        limparBtn.addActionListener(this::limpar);
+        salvarBtn.addActionListener(this::cadastrar);
     }
 
-    private void aoClicarEmSalvar(ActionEvent event) {
+    private void limpar(ActionEvent event) {
+        nomeTxt.setText("");
+        cnpjTxt.setText("");
+        telefoneTxt.setText("");
+        emailTxt.setText("");
+        logradouroTxt.setText("");
+        numeroTxt.setText("");
+        complementoTxt.setText("");
+        bairroTxt.setText("");
+        cidadeTxt.setText("");
+        ufTxt.setText("");
+        cepTxt.setText("");
+    }
+
+    private void cadastrar(ActionEvent event) {
         String nome = nomeTxt.getText();
         String cnpj = cnpjTxt.getText();
         String telefone = telefoneTxt.getText();
@@ -264,12 +248,9 @@ public class TelaFornecedor {
             FornecedorDAO fornecedorDAO = new FornecedorDAO();
 
             fornecedorDAO.inserir(fornecedor);
-        } catch (Exception e) {
-            String mensagemDeErro = e.getMessage();
 
-            erroMsg.setText(mensagemDeErro);
-
-            erroMsg.setVisible(true);
+        } catch (Exception ex) {
+            popUp.mensagemDeErro("Erro ao cadastrar fornecedor: " + ex.getMessage());
         }
     }
 }

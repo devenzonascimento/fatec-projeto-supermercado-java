@@ -9,14 +9,13 @@ public class Fornecedor extends Contato {
 
     public Fornecedor() {}
 
-    public Fornecedor(String nome, String cnpj, String telefone, String email, String endereco, ArrayList<Produto> produtosFornecidos) {
+    public Fornecedor(String nome, String cnpj, String telefone, String email, String endereco) {
         super();
         setNome(nome);
         setCnpj(cnpj);
         setTelefone(telefone);
         setEmail(email);
         setEndereco(endereco);
-        setProdutosFornecidos(produtosFornecidos);
     }
 
     public String getCnpj() {

@@ -1,19 +1,33 @@
-import Tela.HistoricoPedidos.TelaHistoricoPedidos;
-import Tela.Pedidos.TelaPedidos;
-import Tela.TelaFornecedor;
+import Tela.*;
+
+import javax.swing.*;
 
 public class Supermercado {
     public static void main(String[] args) {
-        TelaFornecedor telaFornecedor = new TelaFornecedor();
+        JFrame frame = new JFrame("Sistema de Gerenciamento de Supermercado");
 
-        telaFornecedor.mostrar();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1000, 700);
 
-        TelaPedidos telaPedidos = new TelaPedidos();
+        JTabbedPane secoes = new JTabbedPane();
 
-        telaPedidos.mostrar();
+        CadastroDeFornecedor telaCadastroDeFornecedor = new CadastroDeFornecedor();
+        ListagemDeFornecedores telaListagemDeFornecedores = new ListagemDeFornecedores();
+        SolicitacaoDePedido telaSolicitacaoDePedido = new SolicitacaoDePedido();
+        HistoricoDePedidos telaHistoricoDePedidos = new HistoricoDePedidos();
 
-        TelaHistoricoPedidos telaHistoricoPedidos = new TelaHistoricoPedidos();
+        JPanel cadastroDeFornecedor = telaCadastroDeFornecedor.criar();
+        JPanel listagemDeFornecedores = telaListagemDeFornecedores.criar();
+        JPanel solicitacaoDePedido = telaSolicitacaoDePedido.criar();
+        JPanel historicoDePedidos = telaHistoricoDePedidos.criar();
 
-        telaHistoricoPedidos.mostrar();
+        secoes.add("Cadastrar Fornecedor", cadastroDeFornecedor);
+        secoes.add("Lista de Fornecedores", listagemDeFornecedores);
+        secoes.add("Solicitar Pedido", solicitacaoDePedido);
+        secoes.add("Historico de pedido", historicoDePedidos);
+
+        frame.add(secoes);
+
+        frame.setVisible(true);
     }
 }

@@ -9,8 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-public class ListagemFornecedores {
-
+public class ListagemDeFornecedores {
     private ArrayList<Fornecedor> fornecedores;
     private FornecedorDAO fornecedorDAO;
 
@@ -21,16 +20,29 @@ public class ListagemFornecedores {
     private DefaultTableModel tableModel;
     private JTable table;
 
-    public ListagemFornecedores() {
-        fornecedorDAO = new FornecedorDAO();
-        fornecedores = fornecedorDAO.listar();
-
+    public ListagemDeFornecedores() {
         barraPesquisaTxt = new JTextField(50);
         atualizarBtn = new JButton();
         pesquisarBtn = new JButton();
+
+        tableModel = new DefaultTableModel(new String[]{"ID", "Nome", "CNPJ", "Telefone", "E-Mail", "Endereco"}, 0);
+        table = new JTable(tableModel);
+
+        table.getColumnModel().getColumn(0).setPreferredWidth(10);
+        table.getColumnModel().getColumn(1).setPreferredWidth(150);
+        table.getColumnModel().getColumn(2).setPreferredWidth(90);
+        table.getColumnModel().getColumn(3).setPreferredWidth(70);
+        table.getColumnModel().getColumn(4).setPreferredWidth(200);
+        table.getColumnModel().getColumn(5).setPreferredWidth(250);
+
+        fornecedorDAO = new FornecedorDAO();
+        fornecedores = fornecedorDAO.listar();
+        recarregarListagem();
+
+        configurarEventos();
     }
 
-    public JPanel criarListagem() {
+    public JPanel criar() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints layout = new GridBagConstraints();
 
@@ -53,8 +65,6 @@ public class ListagemFornecedores {
     }
 
     private JPanel criarCabecalhoTabela() {
-        atualizarBtn.addActionListener(this::aoAtualizarListagem);
-
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints layout = new GridBagConstraints();
 
@@ -62,11 +72,10 @@ public class ListagemFornecedores {
         panel.add(new JLabel("Pesquisar fornecedor pelo nome: "), layout);
 
         pesquisarBtn.setText("Pesquisar");
+        atualizarBtn.setText("Atualizar");
 
         layout.gridx = 2;
         panel.add(pesquisarBtn, layout);
-
-        atualizarBtn.setText("Atualizar");
 
         layout.gridx = 3;
         layout.insets = new Insets(0, 20, 0, 0);
@@ -75,33 +84,20 @@ public class ListagemFornecedores {
         layout.gridx = 1;
         layout.weightx = 1.0;
         layout.fill = GridBagConstraints.BOTH;
+        layout.insets = new Insets(0, 10, 0, 10);
         panel.add(barraPesquisaTxt, layout);
 
         return panel;
     }
 
     private JScrollPane criarTabela() {
-        String[] columnNames = {"ID", "Nome", "CNPJ", "Telefone", "E-Mail", "Endereco"};
-
-        tableModel = new DefaultTableModel(columnNames, 0);
-        table = new JTable(tableModel);
-
-        atualizarTabela();
-
-        table.getColumnModel().getColumn(0).setPreferredWidth(10);
-        table.getColumnModel().getColumn(1).setPreferredWidth(150);
-        table.getColumnModel().getColumn(2).setPreferredWidth(90);
-        table.getColumnModel().getColumn(3).setPreferredWidth(70);
-        table.getColumnModel().getColumn(4).setPreferredWidth(200);
-        table.getColumnModel().getColumn(5).setPreferredWidth(250);
-
         return new JScrollPane(table);
     }
 
-    private void atualizarTabela() {
+    private void recarregarListagem() {
         tableModel.setRowCount(0);
 
-        fornecedores.forEach(fornecedor -> {
+        for (Fornecedor fornecedor : fornecedores) {
             tableModel.addRow(new Object[]{
                     fornecedor.getId(),
                     fornecedor.getNome(),
@@ -110,11 +106,25 @@ public class ListagemFornecedores {
                     fornecedor.getEmail(),
                     fornecedor.getEndereco()
             });
-        });
+        }
     }
 
-    private void aoAtualizarListagem(ActionEvent event) {
+    private void configurarEventos() {
+        atualizarBtn.addActionListener(this::atualizarListagem);
+        pesquisarBtn.addActionListener(this::pesquisarFornecedor);
+    }
+
+    private void atualizarListagem(ActionEvent event) {
         fornecedores = fornecedorDAO.listar();
-        atualizarTabela();
+
+        barraPesquisaTxt.setText("");
+
+        recarregarListagem();
+    }
+
+    private void pesquisarFornecedor(ActionEvent event) {
+        fornecedores = fornecedorDAO.pesquisarPorNome(barraPesquisaTxt.getText());
+
+        recarregarListagem();
     }
 }

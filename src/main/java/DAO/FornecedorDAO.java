@@ -71,6 +71,42 @@ public class FornecedorDAO {
         return fornecedores;
     }
 
+    public ArrayList<Fornecedor> pesquisarPorNome(String nome) {
+        Connection conn = conexaoMySql.conectar();
+
+        ArrayList<Fornecedor> fornecedores = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM fornecedor WHERE nome LIKE ?";
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, "%" + nome + "%");
+
+            ResultSet resultado = stmt.executeQuery();
+
+            while (resultado.next()) {
+                Fornecedor fornecedor = new Fornecedor();
+
+                fornecedor.setId(resultado.getLong("id"));
+                fornecedor.setNome(resultado.getString("nome"));
+                fornecedor.setCnpj(resultado.getString("cnpj"));
+                fornecedor.setTelefone(resultado.getString("telefone"));
+                fornecedor.setEmail(resultado.getString("email"));
+                fornecedor.setEndereco(resultado.getString("endereco"));
+
+                fornecedores.add(fornecedor);
+            }
+
+        } catch (SQLException err) {
+            System.err.println("Erro ao buscar fornecedores com o nome " + nome + ": " + err.getMessage());
+        } finally {
+            conexaoMySql.desconectar();
+        }
+
+        return fornecedores;
+    }
+
     public ArrayList<Produto> listarProdutosFornecidos(long fornecedorId) {
         Connection conn = conexaoMySql.conectar();
 

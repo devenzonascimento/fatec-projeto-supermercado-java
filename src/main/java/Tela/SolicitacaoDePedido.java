@@ -1,9 +1,8 @@
-package Tela.Pedidos;
+package Tela;
 
-import Entidade.*;
 import DAO.FornecedorDAO;
 import DAO.PedidoDAO;
-import DAO.ProdutoDAO;
+import Entidade.*;
 import Enum.MetodoPagamento;
 import Enum.TipoPagamento;
 import Tela.Utilitarios.MostrarPopUp;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TelaPedidos {
+public class SolicitacaoDePedido {
 
     private JComboBox<Fornecedor> fornecedorComboBox;
     private JLabel valorTotalLbl;
@@ -37,7 +36,7 @@ public class TelaPedidos {
 
     private MostrarPopUp popUp;
 
-    public TelaPedidos() {
+    public SolicitacaoDePedido() {
         fornecedorComboBox = new JComboBox<Fornecedor>();
         valorTotalLbl = new JLabel("R$ 0,00");
         metodoPagamentoComboBox = new JComboBox<MetodoPagamento>();
@@ -51,11 +50,11 @@ public class TelaPedidos {
         quantidadeTxt = new JTextField(10);
         precoUnitarioTxt = new JTextField(10);
         adicionarItemBtn = new JButton("Adicionar Item");
+
         salvarPedidoBtn = new JButton("Salvar Pedido");
 
         popUp = new MostrarPopUp();
 
-        // Tabela para exibir itens do pedido
         itensTableModel = new DefaultTableModel(new String[]{"Produto", "Quantidade", "Preço Unitário", "Subtotal"}, 0);
         itensTable = new JTable(itensTableModel);
 
@@ -69,15 +68,10 @@ public class TelaPedidos {
         configurarEventos();
     }
 
-    public void mostrar() {
-        JFrame frame = new JFrame("Cadastro de Pedido para Fornecedor");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 700);
-
-        JPanel mainPanel = new JPanel(new BorderLayout());
+    public JPanel criar() {
+        JPanel panel = new JPanel(new BorderLayout());
 
         JPanel painelItensPedido = new JPanel(new GridBagLayout());
-
         GridBagConstraints layout = new GridBagConstraints();
 
         layout.gridx = 0;
@@ -91,13 +85,11 @@ public class TelaPedidos {
         layout.anchor = GridBagConstraints.NORTH;
         painelItensPedido.add(criarPainelAdicionarItemPedido(), layout);
 
+        panel.add(criarPainelCadastroPedido(), BorderLayout.NORTH);
+        panel.add(painelItensPedido, BorderLayout.CENTER);
+        panel.add(criarPainelBotoes(), BorderLayout.SOUTH);
 
-        mainPanel.add(criarPainelCadastroPedido(), BorderLayout.NORTH);
-        mainPanel.add(painelItensPedido, BorderLayout.CENTER);
-        mainPanel.add(criarPainelBotoes(), BorderLayout.SOUTH);
-
-        frame.add(mainPanel);
-        frame.setVisible(true);
+        return panel;
     }
 
     private JPanel criarPainelCadastroPedido() {
