@@ -194,6 +194,7 @@ public class TelaPedidos {
     private void configurarEventos() {
         adicionarItemBtn.addActionListener(this::adicionarItem);
         salvarPedidoBtn.addActionListener(this::salvarPedido);
+        fornecedorComboBox.addActionListener(this::atualizarProdutosFornecidos);
     }
 
     private void carregarFornecedores() {
@@ -209,9 +210,15 @@ public class TelaPedidos {
     }
 
     private void carregarProdutos() {
-        ProdutoDAO produtoDAO = new ProdutoDAO();
+        FornecedorDAO fornecedorDAO = new FornecedorDAO();
+
+        Fornecedor fornecedorSelecionado = (Fornecedor) fornecedorComboBox.getSelectedItem();
+
+        produtoComboBox.removeAllItems();
+
         try {
-            List<Produto> produtos = produtoDAO.listar();
+            assert fornecedorSelecionado != null;
+            List<Produto> produtos = fornecedorDAO.listarProdutosFornecidos(fornecedorSelecionado.getId());
             for (Produto produto : produtos) {
                 produtoComboBox.addItem(produto);
             }
@@ -219,6 +226,10 @@ public class TelaPedidos {
             popUp.mensagemDeErro("Erro ao carregar produtos: " + e.getMessage());
         }
     }
+
+    private void atualizarProdutosFornecidos(ActionEvent e) {
+        carregarProdutos();
+    };
 
     private void adicionarItem(ActionEvent e) {
         Produto produto = (Produto) produtoComboBox.getSelectedItem();
