@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Pedido {
+
     private long id;
     private Date dataPedido;
     private Date dataEntrega;
@@ -80,5 +81,15 @@ public class Pedido {
 
     public void setItens(ArrayList<ItemProduto> itens) {
         this.itens = itens;
+    }
+
+    public double calcularValorTotal() {
+        double valorTotal = 0.0;
+
+        for (ItemProduto item : itens) {
+            valorTotal =+ item.getSubTotal();
+        }
+
+        return valorTotal;
     }
 }

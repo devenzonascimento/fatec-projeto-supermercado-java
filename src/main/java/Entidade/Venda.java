@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Venda {
+
     private long id;
     private Date data;
     private Cliente cliente;
@@ -59,5 +60,15 @@ public class Venda {
 
     public void setItens(ArrayList<ItemProduto> itens) {
         this.itens = itens;
+    }
+
+    public double calcularValorTotal() {
+        double valorTotal = 0.0;
+
+        for (ItemProduto item : itens) {
+            valorTotal = +item.getSubTotal();
+        }
+
+        return valorTotal;
     }
 }

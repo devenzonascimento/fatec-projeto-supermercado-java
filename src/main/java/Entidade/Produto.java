@@ -9,7 +9,8 @@ public class Produto {
     private int quantidadeMinima;
     private String categoria;
 
-    public Produto() {}
+    public Produto() {
+    }
 
     public Produto(long id, String nome, String codigoDeBarras, double preco, int quantidadeAtual, int quantidadeMinima, String categoria) {
         setId(id);
@@ -79,5 +80,9 @@ public class Produto {
 
     public String toString() {
         return this.nome;
+    }
+
+    public boolean estoqueEstaBaixo() {
+        return quantidadeAtual < quantidadeMinima ? true : false;
     }
 }
