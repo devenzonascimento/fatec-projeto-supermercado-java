@@ -253,7 +253,7 @@ public class PedidoDAO implements IPedidoDAO {
     }
 
     @Override
-    public boolean atualizar(Pedido pedido) {
+    public int atualizar(Pedido pedido) {
         Connection conn = conexaoMySql.conectar();
 
         try {
@@ -265,18 +265,18 @@ public class PedidoDAO implements IPedidoDAO {
 
             int linhasAtualizadas = stmt.executeUpdate();
 
-            return linhasAtualizadas > 0;
+            return linhasAtualizadas;
 
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar pedido: " + e.getMessage());
-            return false;
+            return 0;
         } finally {
             conexaoMySql.desconectar();
         }
     }
 
     @Override
-    public boolean remover(long id) {
+    public int remover(long id) {
         Connection conn = conexaoMySql.conectar();
 
         try {
@@ -286,11 +286,11 @@ public class PedidoDAO implements IPedidoDAO {
 
             int linhasAfetadas = stmt.executeUpdate();
 
-            return linhasAfetadas > 0;
+            return linhasAfetadas;
 
         } catch (SQLException e) {
             System.err.println("Erro ao remover pedido: " + e.getMessage());
-            return false;
+            return 0;
         } finally {
             conexaoMySql.desconectar();
         }

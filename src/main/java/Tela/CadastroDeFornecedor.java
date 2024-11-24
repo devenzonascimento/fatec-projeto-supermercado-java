@@ -239,7 +239,7 @@ public class CadastroDeFornecedor {
             String cnpj = cnpjTxt.getText();
             String telefone = telefoneTxt.getText();
             String email = emailTxt.getText();
-            String endereco = getEndereco();
+            String endereco = transformarEndercoEmString();
 
             fornecedor = new Fornecedor(nome, cnpj, telefone, email, endereco);
 
@@ -250,7 +250,7 @@ public class CadastroDeFornecedor {
         }
     }
 
-    private String getEndereco() throws Exception {
+    private String transformarEndercoEmString() throws Exception {
         Endereco endereco = new Endereco();
 
         endereco.setLogradouro(logradouroTxt.getText());

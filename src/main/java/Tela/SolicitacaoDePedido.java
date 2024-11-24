@@ -277,7 +277,7 @@ public class SolicitacaoDePedido {
         ArrayList<ItemProduto> itens = obterItensDePedido();
 
         for (ItemProduto item : itens) {
-            valorTotal += item.getSubTotal();
+            valorTotal += item.calcularSubTotal();
         }
 
         return valorTotal;

@@ -12,7 +12,7 @@ public interface IPedidoDAO {
 
     int inserir(Pedido pedido);
 
-    boolean atualizar(Pedido pedido);
+    int atualizar(Pedido pedido);
 
-    boolean remover(long id);
+    int remover(long id);
 }

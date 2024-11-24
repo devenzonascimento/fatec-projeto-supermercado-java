@@ -48,7 +48,7 @@ public class ItemProduto {
         this.produto = produto;
     }
 
-    public double getSubTotal() {
+    public double calcularSubTotal() {
         return quantidade * precoUnitario;
     }
 }

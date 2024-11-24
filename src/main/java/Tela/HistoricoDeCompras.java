@@ -116,8 +116,7 @@ public class HistoricoDeCompras {
     }
 
     private void pesquisarFornecedor(ActionEvent event) {
-//        historicoDeCompras = historicoDeCompraDAO.pesquisarPorNome(barraPesquisaTxt.getText());
-        historicoDeCompras = historicoDeComprasDAO.gerar();
+        historicoDeCompras = historicoDeComprasDAO.pesquisarPorNome(barraPesquisaTxt.getText());
 
         recarregarListagem();
     }

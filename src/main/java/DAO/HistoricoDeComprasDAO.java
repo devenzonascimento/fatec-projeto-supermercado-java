@@ -42,7 +42,43 @@ public class HistoricoDeComprasDAO implements IHistoricoDeCompras {
             }
 
         } catch (SQLException err) {
-            System.err.println("Erro ao listar produtos: " + err.getMessage());
+            System.err.println("Erro ao recuperar historico de compras: " + err.getMessage());
+        } finally {
+            conexaoMySql.desconectar();
+        }
+
+        return historico;
+    }
+
+    @Override
+    public ArrayList<HistoricoDeCompras> pesquisarPorNome(String nome) {
+        Connection conn = conexaoMySql.conectar();
+        ArrayList<HistoricoDeCompras> historico = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM Historico_Compras WHERE fornecedor_nome LIKE ?";
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, "%" + nome + "%");
+
+            ResultSet resultado = stmt.executeQuery();
+
+            while (resultado.next()) {
+                HistoricoDeCompras registroDoHistorico = new HistoricoDeCompras();
+
+                registroDoHistorico.setFornecedorId(resultado.getLong("fornecedor_id"));
+                registroDoHistorico.setFornecedorNome(resultado.getString("fornecedor_nome"));
+                registroDoHistorico.setQuantidadeDeCompras(resultado.getInt("quantidade_de_compras"));
+                registroDoHistorico.setValorTotalGasto(resultado.getDouble("valor_total_gasto"));
+                registroDoHistorico.setDataUltimaCompra(resultado.getDate("data_ultima_compra"));
+                registroDoHistorico.setFrequenciaDeCompraEmDias(resultado.getInt("frequencia_pedidos_dias"));
+
+                historico.add(registroDoHistorico);
+            }
+
+        } catch (SQLException err) {
+            System.err.println("Erro ao recuperar historico de compras: " + err.getMessage());
         } finally {
             conexaoMySql.desconectar();
         }

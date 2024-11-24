@@ -87,7 +87,7 @@ public class Pedido {
         double valorTotal = 0.0;
 
         for (ItemProduto item : itens) {
-            valorTotal =+ item.getSubTotal();
+            valorTotal =+ item.calcularSubTotal();
         }
 
         return valorTotal;
