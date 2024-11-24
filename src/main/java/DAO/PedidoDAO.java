@@ -19,34 +19,34 @@ public class PedidoDAO implements IPedidoDAO {
         ArrayList<Pedido> pedidos = new ArrayList<>();
         Connection conn = conexaoMySql.conectar();
         PreparedStatement stmt = null;
-        ResultSet rs = null;
+        ResultSet resultado = null;
 
         try {
-            String sql = "SELECT p.id, p.data_pedido, p.data_entrega, p.status, p.fornecedor_id, p.pagamento_id, " + "f.nome AS fornecedor_nome, f.cnpj, f.telefone, f.email, f.endereco, " + "pay.valor AS pagamento_valor, pay.metodo AS pagamento_metodo, pay.tipo AS pagamento_tipo " + "FROM pedido p " + "JOIN fornecedor f ON p.fornecedor_id = f.id " + "JOIN pagamento pay ON p.pagamento_id = pay.id";
+            String sql = "SELECT p.id, p.data_pedido, p.data_entrega, p.status, p.fornecedor_id, p.pagamento_id, " + "f.nome AS fornecedor_nome, f.cnpj, f.telefone, f.email, f.endereco, " + "pg.valor AS pagamento_valor, pg.metodo AS pagamento_metodo, pg.tipo AS pagamento_tipo " + "FROM pedido p " + "INNER JOIN fornecedor f ON p.fornecedor_id = f.id " + "INNER JOIN pagamento pg ON p.pagamento_id = pg.id";
             stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
+            resultado = stmt.executeQuery();
 
-            while (rs.next()) {
-                long id = rs.getLong("id");
-                Date dataPedido = rs.getDate("data_pedido");
-                Date dataEntrega = rs.getDate("data_entrega");
-                StatusPedido status = StatusPedido.valueOf(rs.getString("status"));
+            while (resultado.next()) {
+                long id = resultado.getLong("id");
+                Date dataPedido = resultado.getDate("data_pedido");
+                Date dataEntrega = resultado.getDate("data_entrega");
+                StatusPedido status = StatusPedido.valueOf(resultado.getString("status"));
 
                 // Fornecedor
                 Fornecedor fornecedor = new Fornecedor();
-                fornecedor.setId(rs.getLong("fornecedor_id"));
-                fornecedor.setNome(rs.getString("fornecedor_nome"));
-                fornecedor.setCnpj(rs.getString("cnpj"));
-                fornecedor.setTelefone(rs.getString("telefone"));
-                fornecedor.setEmail(rs.getString("email"));
-                fornecedor.setEndereco(rs.getString("endereco"));
+                fornecedor.setId(resultado.getLong("fornecedor_id"));
+                fornecedor.setNome(resultado.getString("fornecedor_nome"));
+                fornecedor.setCnpj(resultado.getString("cnpj"));
+                fornecedor.setTelefone(resultado.getString("telefone"));
+                fornecedor.setEmail(resultado.getString("email"));
+                fornecedor.setEndereco(resultado.getString("endereco"));
 
                 // Pagamento
                 Pagamento pagamento = new Pagamento();
-                pagamento.setId(rs.getLong("pagamento_id"));
-                pagamento.setValor(rs.getDouble("pagamento_valor"));
-                pagamento.setMetodo(MetodoPagamento.valueOf(rs.getString("pagamento_metodo")));
-                pagamento.setTipo(TipoPagamento.valueOf(rs.getString("pagamento_tipo")));
+                pagamento.setId(resultado.getLong("pagamento_id"));
+                pagamento.setValor(resultado.getDouble("pagamento_valor"));
+                pagamento.setMetodo(MetodoPagamento.valueOf(resultado.getString("pagamento_metodo")));
+                pagamento.setTipo(TipoPagamento.valueOf(resultado.getString("pagamento_tipo")));
 
                 // Criando o pedido
                 Pedido pedido = new Pedido(id, dataPedido, dataEntrega, status, fornecedor, pagamento, new ArrayList<>());
@@ -55,21 +55,21 @@ public class PedidoDAO implements IPedidoDAO {
                 String sqlItens = "SELECT ip.id, ip.quantidade, ip.preco_unitario, ip.pedido_id, ip.produto_id, " + "prod.nome AS produto_nome, prod.codigo_de_barras, prod.preco_venda " + "FROM item_pedido ip " + "JOIN produto prod ON ip.produto_id = prod.id " + "WHERE ip.pedido_id = ?";
                 PreparedStatement stmtItens = conn.prepareStatement(sqlItens);
                 stmtItens.setLong(1, id);
-                ResultSet rsItens = stmtItens.executeQuery();
+                ResultSet resultadoItens = stmtItens.executeQuery();
 
-                while (rsItens.next()) {
+                while (resultadoItens.next()) {
                     // Criando os itens do pedido
                     ItemProduto item = new ItemProduto();
-                    item.setId(rsItens.getLong("id"));
-                    item.setQuantidade(rsItens.getInt("quantidade"));
-                    item.setPrecoUnitario(rsItens.getDouble("preco_unitario"));
+                    item.setId(resultadoItens.getLong("id"));
+                    item.setQuantidade(resultadoItens.getInt("quantidade"));
+                    item.setPrecoUnitario(resultadoItens.getDouble("preco_unitario"));
 
                     Produto produto = new Produto();
 
-                    rsItens.getLong("produto_id");
-                    rsItens.getString("produto_nome");
-                    rsItens.getString("codigo_de_barras");
-                    rsItens.getDouble("preco_venda");
+                    resultadoItens.getLong("produto_id");
+                    resultadoItens.getString("produto_nome");
+                    resultadoItens.getString("codigo_de_barras");
+                    resultadoItens.getDouble("preco_venda");
 
                     item.setProduto(new Produto());
 
@@ -80,15 +80,10 @@ public class PedidoDAO implements IPedidoDAO {
             }
 
         } catch (SQLException e) {
+            System.err.println("Erro ao listar pedidos: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-                conexaoMySql.desconectar();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoMySql.desconectar();
         }
 
         return pedidos;
@@ -97,22 +92,69 @@ public class PedidoDAO implements IPedidoDAO {
     @Override
     public Pedido buscarPorId(long id) {
         Connection conn = conexaoMySql.conectar();
+        PreparedStatement stmt = null;
+        ResultSet resultado = null;
         Pedido pedido = null;
 
         try {
-            String sql = "SELECT * FROM pedido WHERE id = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            String sql = "SELECT p.id, p.data_pedido, p.data_entrega, p.status, p.fornecedor_id, p.pagamento_id, " + "f.nome AS fornecedor_nome, f.cnpj, f.telefone, f.email, f.endereco, " + "pg.valor AS pagamento_valor, pg.metodo AS pagamento_metodo, pg.tipo AS pagamento_tipo " + "FROM pedido p " + "INNER JOIN fornecedor f ON p.fornecedor_id = f.id " + "INNER JOIN pagamento pg ON p.pagamento_id = pg.id " + "WHERE p.id = ?";
+            stmt = conn.prepareStatement(sql);
             stmt.setLong(1, id);
-            ResultSet resultado = stmt.executeQuery();
+            resultado = stmt.executeQuery();
 
-            if (resultado.next()) {
-                pedido = new Pedido();
-                pedido.setId(resultado.getLong("id"));
-                pedido.setDataEntrega(resultado.getDate("data_entrega"));
-                // Atribuir outros campos conforme necessário
+            while (resultado.next()) {
+                Date dataPedido = resultado.getDate("data_pedido");
+                Date dataEntrega = resultado.getDate("data_entrega");
+                StatusPedido status = StatusPedido.valueOf(resultado.getString("status"));
+
+                // Fornecedor
+                Fornecedor fornecedor = new Fornecedor();
+                fornecedor.setId(resultado.getLong("fornecedor_id"));
+                fornecedor.setNome(resultado.getString("fornecedor_nome"));
+                fornecedor.setCnpj(resultado.getString("cnpj"));
+                fornecedor.setTelefone(resultado.getString("telefone"));
+                fornecedor.setEmail(resultado.getString("email"));
+                fornecedor.setEndereco(resultado.getString("endereco"));
+
+                // Pagamento
+                Pagamento pagamento = new Pagamento();
+                pagamento.setId(resultado.getLong("pagamento_id"));
+                pagamento.setValor(resultado.getDouble("pagamento_valor"));
+                pagamento.setMetodo(MetodoPagamento.valueOf(resultado.getString("pagamento_metodo")));
+                pagamento.setTipo(TipoPagamento.valueOf(resultado.getString("pagamento_tipo")));
+
+                // Criando o pedido
+                pedido = new Pedido(id, dataPedido, dataEntrega, status, fornecedor, pagamento, new ArrayList<>());
+
+                // Agora, buscar os itens do pedido
+                String sqlItens = "SELECT ip.id, ip.quantidade, ip.preco_unitario, ip.pedido_id, ip.produto_id, " + "prod.nome AS produto_nome, prod.codigo_de_barras, prod.preco_venda " + "FROM item_pedido ip " + "JOIN produto prod ON ip.produto_id = prod.id " + "WHERE ip.pedido_id = ?";
+                PreparedStatement stmtItens = conn.prepareStatement(sqlItens);
+                stmtItens.setLong(1, id);
+                ResultSet resultadoItens = stmtItens.executeQuery();
+
+                while (resultadoItens.next()) {
+                    // Criando os itens do pedido
+                    ItemProduto item = new ItemProduto();
+                    item.setId(resultadoItens.getLong("id"));
+                    item.setQuantidade(resultadoItens.getInt("quantidade"));
+                    item.setPrecoUnitario(resultadoItens.getDouble("preco_unitario"));
+
+                    Produto produto = new Produto();
+
+                    resultadoItens.getLong("produto_id");
+                    resultadoItens.getString("produto_nome");
+                    resultadoItens.getString("codigo_de_barras");
+                    resultadoItens.getDouble("preco_venda");
+
+                    item.setProduto(new Produto());
+
+                    pedido.getItens().add(item);
+                }
             }
+
         } catch (SQLException e) {
             System.err.println("Erro ao buscar pedido por ID: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             conexaoMySql.desconectar();
         }
