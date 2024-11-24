@@ -3,6 +3,7 @@ package Tela;
 import Entidade.Endereco;
 import DAO.FornecedorDAO;
 import Entidade.Fornecedor;
+import Interface.IFornecedorDAO;
 import Tela.Utilitarios.MostrarPopUp;
 
 import javax.swing.*;
@@ -245,7 +246,7 @@ public class CadastroDeFornecedor {
 
             Fornecedor fornecedor = new Fornecedor(nome, cnpj, telefone, email, endereco);
 
-            FornecedorDAO fornecedorDAO = new FornecedorDAO();
+            IFornecedorDAO fornecedorDAO = new FornecedorDAO();
 
             fornecedorDAO.inserir(fornecedor);
 

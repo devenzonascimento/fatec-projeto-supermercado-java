@@ -1,40 +1,17 @@
 package DAO;
 
 import Entidade.Fornecedor;
-import Entidade.Produto;
+import Interface.IFornecedorDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class FornecedorDAO {
+public class FornecedorDAO implements IFornecedorDAO {
+
     private ConexaoMysql conexaoMySql;
 
     public FornecedorDAO() {
         conexaoMySql = new ConexaoMysql();
-    }
-
-    public int inserir(Fornecedor fornecedor) {
-        Connection conn = conexaoMySql.conectar();
-
-        try {
-            String sql = "INSERT INTO fornecedor(nome, cnpj, telefone, email, endereco) VALUES(?,?,?,?,?)";
-
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            stmt.setString(1, fornecedor.getNome());
-            stmt.setString(2, fornecedor.getCnpj());
-            stmt.setString(3, fornecedor.getTelefone());
-            stmt.setString(4, fornecedor.getEmail());
-            stmt.setString(5, fornecedor.getEndereco());
-
-            return stmt.executeUpdate();
-
-        } catch (SQLException err) {
-            System.err.println("Erro ao cadastrar fornecedor: " + err.getMessage());
-            return 0;
-        } finally {
-            conexaoMySql.desconectar();
-        }
     }
 
     public ArrayList<Fornecedor> listar() {
@@ -71,6 +48,38 @@ public class FornecedorDAO {
         return fornecedores;
     }
 
+    public Fornecedor buscarPorId(long id) {
+        Connection conn = conexaoMySql.conectar();
+
+        Fornecedor fornecedor = new Fornecedor();
+
+        try {
+            String sql = "SELECT * FROM fornecedor WHERE id = ?";
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setLong(1, id);
+
+            ResultSet resultado = stmt.executeQuery();
+
+            if (resultado.next()) {
+                fornecedor.setId(resultado.getLong("id"));
+                fornecedor.setNome(resultado.getString("nome"));
+                fornecedor.setCnpj(resultado.getString("cnpj"));
+                fornecedor.setTelefone(resultado.getString("telefone"));
+                fornecedor.setEmail(resultado.getString("email"));
+                fornecedor.setEndereco(resultado.getString("endereco"));
+            }
+
+        } catch (SQLException err) {
+            System.err.println("Erro ao buscar fornecedor com o id (" + id + "): " + err.getMessage());
+        } finally {
+            conexaoMySql.desconectar();
+        }
+
+        return fornecedor;
+    }
+
     public ArrayList<Fornecedor> pesquisarPorNome(String nome) {
         Connection conn = conexaoMySql.conectar();
 
@@ -99,7 +108,7 @@ public class FornecedorDAO {
             }
 
         } catch (SQLException err) {
-            System.err.println("Erro ao buscar fornecedores com o nome " + nome + ": " + err.getMessage());
+            System.err.println("Erro ao pesquisar fornecedores com o nome (" + nome + "): " + err.getMessage());
         } finally {
             conexaoMySql.desconectar();
         }
@@ -107,45 +116,72 @@ public class FornecedorDAO {
         return fornecedores;
     }
 
-    public ArrayList<Produto> listarProdutosFornecidos(long fornecedorId) {
+    public int inserir(Fornecedor fornecedor) {
         Connection conn = conexaoMySql.conectar();
 
-        ArrayList<Produto> produtos = new ArrayList<>();
-
         try {
-            String sql = new StringBuilder()
-                    .append("SELECT p.id, p.nome, p.codigo_de_barras, p.preco_venda, p.quantidade_minima, p.quantidade_atual, p.categoria FROM fornecedor f ")
-                    .append("INNER JOIN produtofornecido pf ON pf.fornecedor_id = f.id ")
-                    .append("INNER JOIN produto p ON pf.produto_id = p.id ")
-                    .append("WHERE f.id = ?")
-                    .toString();
+            String sql = "INSERT INTO fornecedor(nome, cnpj, telefone, email, endereco) VALUES(?,?,?,?,?)";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
 
-            stmt.setLong(1, fornecedorId);
+            stmt.setString(1, fornecedor.getNome());
+            stmt.setString(2, fornecedor.getCnpj());
+            stmt.setString(3, fornecedor.getTelefone());
+            stmt.setString(4, fornecedor.getEmail());
+            stmt.setString(5, fornecedor.getEndereco());
 
-            ResultSet resultado = stmt.executeQuery();
-
-            while (resultado.next()) {
-                Produto produto = new Produto();
-
-                produto.setId(resultado.getLong("id"));
-                produto.setNome(resultado.getString("nome"));
-                produto.setCodigoDeBarras(resultado.getString("codigo_de_barras"));
-                produto.setPreco(resultado.getDouble("preco_venda"));
-                produto.setQuantidadeAtual(resultado.getInt("quantidade_atual"));
-                produto.setQuantidadeMinima(resultado.getInt("quantidade_minima"));
-                produto.setCategoria(resultado.getString("categoria"));
-
-                produtos.add(produto);
-            }
+            return stmt.executeUpdate();
 
         } catch (SQLException err) {
-            System.err.println("Erro ao listar produtos fornecidos: " + err.getMessage());
+            System.err.println("Erro ao cadastrar fornecedor: " + err.getMessage());
+            return 0;
         } finally {
             conexaoMySql.desconectar();
         }
+    }
 
-        return produtos;
+    public int atualizar(Fornecedor fornecedor) {
+        Connection conn = conexaoMySql.conectar();
+
+        try {
+            String sql = "UPDATE fornecedor SET nome = ?, cnpj = ?, telefone = ?, email = ?, endereco = ? WHERE id = ?";
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, fornecedor.getNome());
+            stmt.setString(2, fornecedor.getCnpj());
+            stmt.setString(3, fornecedor.getTelefone());
+            stmt.setString(4, fornecedor.getEmail());
+            stmt.setString(5, fornecedor.getEndereco());
+            stmt.setLong(6, fornecedor.getId());
+
+            return stmt.executeUpdate();
+
+        } catch (SQLException err) {
+            System.err.println("Erro ao atualizar fornecedor: " + err.getMessage());
+            return 0;
+        } finally {
+            conexaoMySql.desconectar();
+        }
+    }
+
+    public int remover(long id) {
+        Connection conn = conexaoMySql.conectar();
+
+        try {
+            String sql = "DELETE FROM fornecedor WHERE id = ?";
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setLong(1, id);
+
+            return stmt.executeUpdate();
+
+        } catch (SQLException err) {
+            System.err.println("Erro ao remover fornecedor com o id (" + id + "): " + err.getMessage());
+            return 0;
+        } finally {
+            conexaoMySql.desconectar();
+        }
     }
 }
