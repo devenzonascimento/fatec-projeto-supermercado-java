@@ -7,7 +7,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class ListagemDeFornecedores {
     private ArrayList<Fornecedor> fornecedores;
@@ -20,7 +23,11 @@ public class ListagemDeFornecedores {
     private DefaultTableModel tableModel;
     private JTable table;
 
-    public ListagemDeFornecedores() {
+    private Consumer<Fornecedor> aoEditarFornecedor;
+
+    public ListagemDeFornecedores(Consumer<Fornecedor> aoEditarFornecedor) {
+        this.aoEditarFornecedor = aoEditarFornecedor;
+
         barraPesquisaTxt = new JTextField(50);
         atualizarBtn = new JButton();
         pesquisarBtn = new JButton();
@@ -112,6 +119,40 @@ public class ListagemDeFornecedores {
     private void configurarEventos() {
         atualizarBtn.addActionListener(this::atualizarListagem);
         pesquisarBtn.addActionListener(this::pesquisarFornecedor);
+        table.addMouseListener(selecionarFornecedor());
+    }
+
+    private void editarFornecedor(long id) {
+        int linha = table.getSelectedRow();
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(null, "Nenhuma linha foi selecionada!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setId(id);
+        fornecedor.setNome((String) tableModel.getValueAt(linha, 1));
+        fornecedor.setCnpj((String) tableModel.getValueAt(linha, 2));
+        fornecedor.setTelefone((String) tableModel.getValueAt(linha, 3));
+        fornecedor.setEmail((String) tableModel.getValueAt(linha, 4));
+        fornecedor.setEndereco((String) tableModel.getValueAt(linha, 5));
+
+        aoEditarFornecedor.accept(fornecedor);
+    }
+
+    private void excluirFornecedor(long id) {
+        int confirm = JOptionPane.showConfirmDialog(
+                null,
+                "Tem certeza de que deseja excluir o fornecedor com ID: " + id + "?",
+                "Confirmar Exclusão",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            fornecedorDAO.remover(id);
+            atualizarListagem(null);
+            JOptionPane.showMessageDialog(null, "Fornecedor excluído com sucesso!");
+        }
     }
 
     private void atualizarListagem(ActionEvent event) {
@@ -126,5 +167,43 @@ public class ListagemDeFornecedores {
         fornecedores = fornecedorDAO.pesquisarPorNome(barraPesquisaTxt.getText());
 
         recarregarListagem();
+    }
+
+    private MouseAdapter selecionarFornecedor() {
+        return new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int linha = table.getSelectedRow();
+
+                if (linha != -1) {
+                    long id = (long) table.getValueAt(linha, 0);
+                    String nome = (String) table.getValueAt(linha, 1);
+
+                    Object[] opcoes = {"Editar", "Excluir", "Cancelar"};
+                    int escolha = JOptionPane.showOptionDialog(
+                            null,
+                            "Você deseja editar ou excluir o fornecedor?\n\nNome: " + nome + "\nID: " + id,
+                            "Opções",
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            opcoes,
+                            opcoes[2] // Botão padrão (Cancelar)
+                    );
+
+                    // Trata as escolhas
+                    switch (escolha) {
+                        case JOptionPane.YES_OPTION:
+                            editarFornecedor(id);
+                            break;
+                        case JOptionPane.NO_OPTION:
+                            excluirFornecedor(id);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        };
     }
 }

@@ -13,6 +13,10 @@ import java.awt.event.ActionEvent;
 
 public class CadastroDeFornecedor {
 
+    private boolean modoEdicao;
+    private Fornecedor fornecedor;
+    private IFornecedorDAO fornecedorDAO;
+
     private JTextField nomeTxt;
     private JTextField cnpjTxt;
     private JTextField telefoneTxt;
@@ -32,6 +36,9 @@ public class CadastroDeFornecedor {
     private MostrarPopUp popUp;
 
     public CadastroDeFornecedor() {
+        modoEdicao = false;
+        fornecedorDAO = new FornecedorDAO();
+
         nomeTxt = new JTextField(30);
         cnpjTxt = new JTextField(30);
         telefoneTxt = new JTextField(30);
@@ -227,31 +234,43 @@ public class CadastroDeFornecedor {
     }
 
     private void cadastrar(ActionEvent event) {
-        String nome = nomeTxt.getText();
-        String cnpj = cnpjTxt.getText();
-        String telefone = telefoneTxt.getText();
-        String email = emailTxt.getText();
-        String logradouro = logradouroTxt.getText();
-        String numero = numeroTxt.getText();
-        String complemento = complementoTxt.getText();
-        String bairro = bairroTxt.getText();
-        String cidade = cidadeTxt.getText();
-        String uf = ufTxt.getText();
-        String cep = cepTxt.getText();
-
         try {
-            Endereco manipularEndereco = new Endereco(logradouro, numero, complemento, bairro, cidade, uf, cep);
+            String nome = nomeTxt.getText();
+            String cnpj = cnpjTxt.getText();
+            String telefone = telefoneTxt.getText();
+            String email = emailTxt.getText();
+            String endereco = getEndereco();
 
-            String endereco = manipularEndereco.converter();
-
-            Fornecedor fornecedor = new Fornecedor(nome, cnpj, telefone, email, endereco);
-
-            IFornecedorDAO fornecedorDAO = new FornecedorDAO();
+            fornecedor = new Fornecedor(nome, cnpj, telefone, email, endereco);
 
             fornecedorDAO.inserir(fornecedor);
 
         } catch (Exception ex) {
             popUp.mensagemDeErro("Erro ao cadastrar fornecedor: " + ex.getMessage());
         }
+    }
+
+    private String getEndereco() throws Exception {
+        Endereco endereco = new Endereco();
+
+        endereco.setLogradouro(logradouroTxt.getText());
+        endereco.setNumero(numeroTxt.getText());
+        endereco.setComplemento(complementoTxt.getText());
+        endereco.setBairro(bairroTxt.getText());
+        endereco.setCidade(cidadeTxt.getText());
+        endereco.setUf(ufTxt.getText());
+        endereco.setCep(cepTxt.getText());
+
+        return endereco.converter();
+    }
+
+    public void trocarParaModoDeEdicao(Fornecedor fornecedor) {
+        nomeTxt.setText(fornecedor.getNome());
+        cnpjTxt.setText(fornecedor.getCnpj());
+        telefoneTxt.setText(fornecedor.getTelefone());
+        emailTxt.setText(fornecedor.getEmail());
+        logradouroTxt.setText(fornecedor.getEndereco());
+
+        modoEdicao = true;
     }
 }

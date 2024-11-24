@@ -1,3 +1,4 @@
+import Entidade.Fornecedor;
 import Tela.*;
 
 import javax.swing.*;
@@ -22,13 +23,18 @@ public class Supermercado {
         JTabbedPane secoes = new JTabbedPane();
 
         CadastroDeFornecedor telaCadastroDeFornecedor = new CadastroDeFornecedor();
-        ListagemDeFornecedores telaListagemDeFornecedores = new ListagemDeFornecedores();
-        SolicitacaoDePedido telaSolicitacaoDePedido = new SolicitacaoDePedido();
-        HistoricoDeCompras telaHistoricoDeCompras = new HistoricoDeCompras();
-
         JPanel cadastroDeFornecedor = telaCadastroDeFornecedor.criar();
+
+        ListagemDeFornecedores telaListagemDeFornecedores = new ListagemDeFornecedores(fornecedor -> {
+            secoes.setSelectedIndex(0);
+            telaCadastroDeFornecedor.trocarParaModoDeEdicao(fornecedor);
+        });
         JPanel listagemDeFornecedores = telaListagemDeFornecedores.criar();
+
+        SolicitacaoDePedido telaSolicitacaoDePedido = new SolicitacaoDePedido();
         JPanel solicitacaoDePedido = telaSolicitacaoDePedido.criar();
+
+        HistoricoDeCompras telaHistoricoDeCompras = new HistoricoDeCompras();
         JPanel historicoDePedidos = telaHistoricoDeCompras.criar();
 
         secoes.add("Cadastrar Fornecedor", cadastroDeFornecedor);
