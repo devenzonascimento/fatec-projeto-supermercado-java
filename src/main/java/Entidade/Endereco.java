@@ -1,8 +1,9 @@
-package Controle;
+package Entidade;
 
 import java.util.Objects;
 
 public class Endereco {
+
     private String logradouro;
     private String numero;
     private String complemento;
@@ -80,16 +81,6 @@ public class Endereco {
         this.cep = cep;
     }
 
-    public String converter() throws Exception {
-        validarEndereco();
-
-        if (Objects.equals(complemento, "")) {
-            return converterEnderecoSemComplemento();
-        }
-
-        return converterEnderecoCompleto();
-    }
-
     private boolean validarEndereco() throws Exception {
         if (Objects.equals(logradouro, "")) {
             throw new Exception("Logradouro é obrigatório.");
@@ -116,6 +107,16 @@ public class Endereco {
         }
 
         return true;
+    }
+
+    public String converter() throws Exception {
+        validarEndereco();
+
+        if (Objects.equals(complemento, "")) {
+            return converterEnderecoSemComplemento();
+        }
+
+        return converterEnderecoCompleto();
     }
 
     private String converterEnderecoCompleto() {

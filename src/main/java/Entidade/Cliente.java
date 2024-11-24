@@ -1,6 +1,7 @@
 package Entidade;
 
 public class Cliente extends Contato {
+    
     private String cpf;
     public Cliente() {}
 

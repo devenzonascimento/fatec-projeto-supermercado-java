@@ -1,6 +1,6 @@
 package DAO;
 
-import Controle.HistoricoDeCompra;
+import Entidade.HistoricoDeCompra;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

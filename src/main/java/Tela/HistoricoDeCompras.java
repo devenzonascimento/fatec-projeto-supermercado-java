@@ -1,9 +1,7 @@
 package Tela;
 
-import Controle.HistoricoDeCompra;
-import DAO.FornecedorDAO;
+import Entidade.HistoricoDeCompra;
 import DAO.HistoricoDeCompraDAO;
-import Entidade.Fornecedor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

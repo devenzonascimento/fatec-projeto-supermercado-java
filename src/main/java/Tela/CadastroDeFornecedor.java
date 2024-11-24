@@ -1,6 +1,6 @@
 package Tela;
 
-import Controle.Endereco;
+import Entidade.Endereco;
 import DAO.FornecedorDAO;
 import Entidade.Fornecedor;
 import Tela.Utilitarios.MostrarPopUp;

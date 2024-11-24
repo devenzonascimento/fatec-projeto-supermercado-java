@@ -1,14 +1,27 @@
-package Controle;
+package Entidade;
 
 import java.util.Date;
 
 public class HistoricoDeCompra {
+
     private long fornecedorId;
     private String fornecedorNome;
     private int quantidadeDeCompras;
     private double valorTotalGasto;
     private Date dataUltimaCompra;
     private int frequenciaDeCompraEmDias;
+
+    public HistoricoDeCompra() {
+    }
+
+    public HistoricoDeCompra(long fornecedorId, String fornecedorNome, int quantidadeDeCompras, double valorTotalGasto, Date dataUltimaCompra, int frequenciaDeCompraEmDias) {
+        this.fornecedorId = fornecedorId;
+        this.fornecedorNome = fornecedorNome;
+        this.quantidadeDeCompras = quantidadeDeCompras;
+        this.valorTotalGasto = valorTotalGasto;
+        this.dataUltimaCompra = dataUltimaCompra;
+        this.frequenciaDeCompraEmDias = frequenciaDeCompraEmDias;
+    }
 
     public long getFornecedorId() {
         return fornecedorId;
@@ -56,9 +69,5 @@ public class HistoricoDeCompra {
 
     public void setFrequenciaDeCompraEmDias(int frequenciaDeCompraEmDias) {
         this.frequenciaDeCompraEmDias = frequenciaDeCompraEmDias;
-    }
-
-    public void gerar() {
-
     }
 }
