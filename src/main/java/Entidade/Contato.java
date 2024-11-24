@@ -1,6 +1,7 @@
 package Entidade;
 
 public abstract class Contato {
+    
     private long id;
     private String nome;
     private String telefone;

@@ -1,6 +1,7 @@
 package Entidade;
 
 public class ItemProduto {
+
     private long id;
     private int quantidade;
     private double precoUnitario;

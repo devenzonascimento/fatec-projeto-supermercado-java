@@ -6,13 +6,15 @@ import Enum.TipoPagamento;
 import java.util.Date;
 
 public class Pagamento {
+
     private long id;
     private double valor;
     private Date data;
     private Enum<MetodoPagamento> metodo;
     private Enum<TipoPagamento> tipo;
 
-    public Pagamento() {}
+    public Pagamento() {
+    }
 
     public Pagamento(long id, double valor, Date data, Enum<MetodoPagamento> metodo, Enum<TipoPagamento> tipo) {
         setId(id);
