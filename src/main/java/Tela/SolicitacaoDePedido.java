@@ -2,9 +2,13 @@ package Tela;
 
 import DAO.FornecedorDAO;
 import DAO.PedidoDAO;
+import DAO.ProdutoDAO;
 import Entidade.*;
 import Enum.MetodoPagamento;
 import Enum.TipoPagamento;
+import Interface.IFornecedorDAO;
+import Interface.IPedidoDAO;
+import Interface.IProdutoDAO;
 import Tela.Utilitarios.MostrarPopUp;
 
 import javax.swing.*;
@@ -190,7 +194,7 @@ public class SolicitacaoDePedido {
     }
 
     private void carregarFornecedores() {
-        FornecedorDAO fornecedorDAO = new FornecedorDAO();
+        IFornecedorDAO fornecedorDAO = new FornecedorDAO();
         try {
             List<Fornecedor> fornecedores = fornecedorDAO.listar();
             for (Fornecedor fornecedor : fornecedores) {
@@ -202,7 +206,7 @@ public class SolicitacaoDePedido {
     }
 
     private void carregarProdutos() {
-        FornecedorDAO fornecedorDAO = new FornecedorDAO();
+        IProdutoDAO produtoDAO = new ProdutoDAO();
 
         Fornecedor fornecedorSelecionado = (Fornecedor) fornecedorComboBox.getSelectedItem();
 
@@ -210,7 +214,7 @@ public class SolicitacaoDePedido {
 
         try {
             assert fornecedorSelecionado != null;
-            List<Produto> produtos = fornecedorDAO.listarProdutosFornecidos(fornecedorSelecionado.getId());
+            List<Produto> produtos = produtoDAO.listarPorFornecedor(fornecedorSelecionado.getId());
             for (Produto produto : produtos) {
                 produtoComboBox.addItem(produto);
             }
@@ -260,7 +264,6 @@ public class SolicitacaoDePedido {
             item.setProduto(produto);
             item.setQuantidade(quantidade);
             item.setPrecoUnitario(precoUnitario);
-            item.setSubTotal(subTotal);
 
             itens.add(item);
         }
@@ -313,8 +316,8 @@ public class SolicitacaoDePedido {
             pedido.setPagamento(pagamento);
             pedido.setItens(itensDoPedido);
 
-            PedidoDAO pedidoDAO = new PedidoDAO();
-            int pedidoId = pedidoDAO.criar(pedido);
+            IPedidoDAO pedidoDAO = new PedidoDAO();
+            int pedidoId = pedidoDAO.inserir(pedido);
 
             if (pedidoId == 0) {
                 popUp.mensagemDeErro("Erro ao salvar o pedido.");
