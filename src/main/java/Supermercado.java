@@ -34,7 +34,7 @@ public class Supermercado {
         secoes.add("Cadastrar Fornecedor", cadastroDeFornecedor);
         secoes.add("Lista de Fornecedores", listagemDeFornecedores);
         secoes.add("Solicitar Pedido", solicitacaoDePedido);
-        secoes.add("Historico de pedido", historicoDePedidos);
+        secoes.add("Historico de Compras", historicoDePedidos);
 
         frame.add(secoes);
 

@@ -1,6 +1,7 @@
 package Tela;
 
 import DAO.HistoricoDeComprasDAO;
+import Interface.IHistoricoDeCompras;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 public class HistoricoDeCompras {
     private ArrayList<Entidade.HistoricoDeCompras> historicoDeCompras;
-    private HistoricoDeComprasDAO historicoDeComprasDAO;
+    private IHistoricoDeCompras historicoDeComprasDAO;
 
     private JTextField barraPesquisaTxt;
     private JButton pesquisarBtn;

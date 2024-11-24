@@ -14,6 +14,7 @@ public class FornecedorDAO implements IFornecedorDAO {
         conexaoMySql = new ConexaoMysql();
     }
 
+    @Override
     public ArrayList<Fornecedor> listar() {
         Connection conn = conexaoMySql.conectar();
 
@@ -48,6 +49,7 @@ public class FornecedorDAO implements IFornecedorDAO {
         return fornecedores;
     }
 
+    @Override
     public Fornecedor buscarPorId(long id) {
         Connection conn = conexaoMySql.conectar();
 
@@ -80,6 +82,7 @@ public class FornecedorDAO implements IFornecedorDAO {
         return fornecedor;
     }
 
+    @Override
     public ArrayList<Fornecedor> pesquisarPorNome(String nome) {
         Connection conn = conexaoMySql.conectar();
 
@@ -116,6 +119,7 @@ public class FornecedorDAO implements IFornecedorDAO {
         return fornecedores;
     }
 
+    @Override
     public int inserir(Fornecedor fornecedor) {
         Connection conn = conexaoMySql.conectar();
 
@@ -140,6 +144,7 @@ public class FornecedorDAO implements IFornecedorDAO {
         }
     }
 
+    @Override
     public int atualizar(Fornecedor fornecedor) {
         Connection conn = conexaoMySql.conectar();
 
@@ -165,6 +170,7 @@ public class FornecedorDAO implements IFornecedorDAO {
         }
     }
 
+    @Override
     public int remover(long id) {
         Connection conn = conexaoMySql.conectar();
 
