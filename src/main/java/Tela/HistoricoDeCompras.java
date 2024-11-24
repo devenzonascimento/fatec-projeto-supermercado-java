@@ -1,7 +1,6 @@
 package Tela;
 
-import Entidade.HistoricoDeCompra;
-import DAO.HistoricoDeCompraDAO;
+import DAO.HistoricoDeComprasDAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,8 +9,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class HistoricoDeCompras {
-    private ArrayList<HistoricoDeCompra> historicoDeCompras;
-    private HistoricoDeCompraDAO historicoDeCompraDAO;
+    private ArrayList<Entidade.HistoricoDeCompras> historicoDeCompras;
+    private HistoricoDeComprasDAO historicoDeComprasDAO;
 
     private JTextField barraPesquisaTxt;
     private JButton pesquisarBtn;
@@ -28,8 +27,8 @@ public class HistoricoDeCompras {
         tableModel = new DefaultTableModel(new String[]{"ID", "Nome", "Quantidade de Compras", "Valor Total Gasto", "Data da Ultima Compra", "Frequencia de Compra em dias"}, 0);
         table = new JTable(tableModel);
 
-        historicoDeCompraDAO = new HistoricoDeCompraDAO();
-        historicoDeCompras = historicoDeCompraDAO.gerar();
+        historicoDeComprasDAO = new HistoricoDeComprasDAO();
+        historicoDeCompras = historicoDeComprasDAO.gerar();
         recarregarListagem();
 
         configurarEventos();
@@ -90,7 +89,7 @@ public class HistoricoDeCompras {
     private void recarregarListagem() {
         tableModel.setRowCount(0);
 
-        for (HistoricoDeCompra registroDoHistorico : historicoDeCompras) {
+        for (Entidade.HistoricoDeCompras registroDoHistorico : historicoDeCompras) {
             tableModel.addRow(new Object[]{
                     registroDoHistorico.getFornecedorId(),
                     registroDoHistorico.getFornecedorNome(),
@@ -108,7 +107,7 @@ public class HistoricoDeCompras {
     }
 
     private void atualizarListagem(ActionEvent event) {
-        historicoDeCompras = historicoDeCompraDAO.gerar();
+        historicoDeCompras = historicoDeComprasDAO.gerar();
 
         barraPesquisaTxt.setText("");
 
@@ -117,7 +116,7 @@ public class HistoricoDeCompras {
 
     private void pesquisarFornecedor(ActionEvent event) {
 //        historicoDeCompras = historicoDeCompraDAO.pesquisarPorNome(barraPesquisaTxt.getText());
-        historicoDeCompras = historicoDeCompraDAO.gerar();
+        historicoDeCompras = historicoDeComprasDAO.gerar();
 
         recarregarListagem();
     }

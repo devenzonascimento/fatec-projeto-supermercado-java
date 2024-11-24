@@ -2,7 +2,7 @@ package Entidade;
 
 import java.util.Date;
 
-public class HistoricoDeCompra {
+public class HistoricoDeCompras {
 
     private long fornecedorId;
     private String fornecedorNome;
@@ -11,10 +11,10 @@ public class HistoricoDeCompra {
     private Date dataUltimaCompra;
     private int frequenciaDeCompraEmDias;
 
-    public HistoricoDeCompra() {
+    public HistoricoDeCompras() {
     }
 
-    public HistoricoDeCompra(long fornecedorId, String fornecedorNome, int quantidadeDeCompras, double valorTotalGasto, Date dataUltimaCompra, int frequenciaDeCompraEmDias) {
+    public HistoricoDeCompras(long fornecedorId, String fornecedorNome, int quantidadeDeCompras, double valorTotalGasto, Date dataUltimaCompra, int frequenciaDeCompraEmDias) {
         this.fornecedorId = fornecedorId;
         this.fornecedorNome = fornecedorNome;
         this.quantidadeDeCompras = quantidadeDeCompras;

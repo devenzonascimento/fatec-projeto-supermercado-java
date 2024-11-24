@@ -1,6 +1,7 @@
 package DAO;
 
-import Entidade.HistoricoDeCompra;
+import Entidade.HistoricoDeCompras;
+import Interface.IHistoricoDeCompras;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,17 +9,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class HistoricoDeCompraDAO {
+public class HistoricoDeComprasDAO implements IHistoricoDeCompras {
     private ConexaoMysql conexaoMySql;
 
-    public HistoricoDeCompraDAO() {
+    public HistoricoDeComprasDAO() {
         conexaoMySql = new ConexaoMysql();
     }
 
-    public ArrayList<HistoricoDeCompra> gerar() {
+    @Override
+    public ArrayList<HistoricoDeCompras> gerar() {
         Connection conn = conexaoMySql.conectar();
-
-        ArrayList<HistoricoDeCompra> historico = new ArrayList<>();
+        ArrayList<HistoricoDeCompras> historico = new ArrayList<>();
 
         try {
             String sql = "SELECT * FROM Historico_Compras";
@@ -28,7 +29,7 @@ public class HistoricoDeCompraDAO {
             ResultSet resultado = stmt.executeQuery();
 
             while (resultado.next()) {
-                HistoricoDeCompra registroDoHistorico = new HistoricoDeCompra();
+                HistoricoDeCompras registroDoHistorico = new HistoricoDeCompras();
 
                 registroDoHistorico.setFornecedorId(resultado.getLong("fornecedor_id"));
                 registroDoHistorico.setFornecedorNome(resultado.getString("fornecedor_nome"));
